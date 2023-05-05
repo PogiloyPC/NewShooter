@@ -4,11 +4,7 @@ using GunSystem.Bullet;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private TypeBullet _typeBullet;
-    [SerializeField] private Rigidbody2D _rb;    
-
-    [SerializeField] private BoxCollider2D _box;
-    [SerializeField] private SpriteRenderer _sprite;
-    [SerializeField] private TrailRenderer _trail;
+    [SerializeField] private Rigidbody2D _rb;     
 
     [SerializeField] private float _lifeBullet;
     private float _speed;
@@ -35,20 +31,17 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Health health = collision.gameObject.GetComponent<Health>();
+        CharacterVitalsStatistic health = collision.gameObject.GetComponent<CharacterVitalsStatistic>();
 
         if (health != null)
         {
             _touch++;
 
             health.TakeDamage(_damage / _touch);
+            health.ReduceStamina(40f);
 
             if (_touch >= _breakingCapacity)
-            {
-                _box.enabled = false;
-                _sprite.enabled = false;
-                _trail.enabled = false;
-
+            {             
                 Destroy(gameObject, 2f);
             }
         }

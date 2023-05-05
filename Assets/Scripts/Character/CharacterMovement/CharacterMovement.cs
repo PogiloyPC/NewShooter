@@ -6,9 +6,7 @@ using CharacterModification;
 
 public class CharacterMovement
 {
-    public Rigidbody2D Body { get; private set; }
-
-    private UnityEvent<float> _changeStamina;
+    public Rigidbody2D Body { get; private set; }    
 
     private float _speedWalk;
     private float _speedRun;

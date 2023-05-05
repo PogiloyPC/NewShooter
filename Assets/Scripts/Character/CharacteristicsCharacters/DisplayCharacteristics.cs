@@ -8,7 +8,7 @@ using System;
 [RequireComponent(typeof(CharacteristicsCharacter))]
 public class DisplayCharacteristics : MonoBehaviour
 {    
-    [SerializeField] private CharacteristicsCharacter _characteristics;
+    [SerializeField] private CharacterVitalsStatistic _characteristics;
 
     [SerializeField] private Image _healthBar;
     [SerializeField] private Image _staminaBar;
@@ -20,13 +20,13 @@ public class DisplayCharacteristics : MonoBehaviour
 
     private void Start()
     {
-        _characteristics._displayHealth.AddListener(DisplayHealth);
-        _characteristics._displayStamina.AddListener(DisplayStamina);
-        _characteristics._displayEnergy.AddListener(DisplayEnergy);        
+        _characteristics.OnDisplayHealth.AddListener(DisplayHealth);
+        _characteristics.OnDisplayStamina.AddListener(DisplayStamina);
+        _characteristics.OnDisplayEnergy.AddListener(DisplayEnergy);        
 
-        _healthValue.text = _characteristics.HealthCharacteristic.ToString("0.0");
-        _staminaValue.text = _characteristics.StaminaCharacteristic.ToString("0.0");
-        _energyValue.text = _characteristics.EnergyCharacteristic.ToString("0.0");
+        _healthValue.text = _characteristics.StartHealth.ToString("0.0");
+        _staminaValue.text = _characteristics.StartStamina.ToString("0.0");
+        _energyValue.text = _characteristics.StartEnergy.ToString("0.0");
     }
 
     private void DisplayHealth(float currentHealth, float startHealth)
@@ -52,8 +52,8 @@ public class DisplayCharacteristics : MonoBehaviour
 
     private void OnDestroy()
     {
-        _characteristics._displayHealth.RemoveListener(DisplayHealth);
-        _characteristics._displayStamina.RemoveListener(DisplayStamina);
-        _characteristics._displayEnergy.RemoveListener(DisplayEnergy);
+        _characteristics.OnDisplayHealth.RemoveListener(DisplayHealth);
+        _characteristics.OnDisplayStamina.RemoveListener(DisplayStamina);
+        _characteristics.OnDisplayEnergy.RemoveListener(DisplayEnergy);
     }
 }

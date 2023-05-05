@@ -6,7 +6,7 @@ using CharacterModification;
 public class Character : MonoBehaviour
 {
     [Header("Characteristics")]
-    [SerializeField] private CharacteristicsCharacter _characteristics;    
+    [SerializeField] private CharacterVitalsStatistic _characteristics;    
     [Header("Property")]
     [SerializeField] private List<Weapon> _weapon;
     

@@ -19,6 +19,6 @@ public class EnemyCharacter : Character
 
     private void Update()
     {
-       
+        ContCharacter();
     }
 }
