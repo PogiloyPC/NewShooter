@@ -8,9 +8,12 @@ public class Character : MonoBehaviour
     [Header("Characteristics")]
     [SerializeField] private CharacterVitalsStatistic _characteristics;    
     [Header("Property")]
-    [SerializeField] private List<Weapon> _weapon;
+    [SerializeField] private List<Weapon> _weapons;
+
+    public IReadOnlyList<Weapon> Weapons => _weapons;
     
     [SerializeField] private Rigidbody2D _body;
+
     [SerializeField] private Animator _anim;
 
     protected ICharacter _character;   
@@ -84,20 +87,20 @@ public class Character : MonoBehaviour
 
     public void ControlWeapon()
     {
-        if (_weapon.Count > 0)
-            _weapon[ActiveWeapon(_character.SwitchWeapon(ref _numberWeapon, _weapon.Count - 1))].ControlWeapon(_character);
+        if (_weapons.Count > 0)
+            _weapons[ActiveWeapon(_character.SwitchWeapon(ref _numberWeapon, _weapons.Count - 1, Weapons))].ControlWeapon(_character);
     }
 
     private int ActiveWeapon(int number)
     {
         _numberWeapon = number;
 
-        for (int i = 0; i < _weapon.Count; i++)
+        for (int i = 0; i < _weapons.Count; i++)
         {
             if (i == _numberWeapon)
-                _weapon[i].gameObject.SetActive(true);
+                _weapons[i].gameObject.SetActive(true);
             else
-                _weapon[i].gameObject.SetActive(false);
+                _weapons[i].gameObject.SetActive(false);
         }
 
         return _numberWeapon;

@@ -29,14 +29,7 @@ public class Inventory : MonoBehaviour
                 _weapon.Add(weapon);
 
                 pickUp = true;
-                break;
-            case StateSmartGlove:
-                StateSmartGlove stateGlove;
-                stateGlove = (StateSmartGlove)item;
-                _stateGlove.Add(stateGlove);
-
-                pickUp = true;
-                break;
+                break;           
             default:
                 pickUp = false;
                 break;

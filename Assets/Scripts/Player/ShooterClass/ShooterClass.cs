@@ -14,9 +14,5 @@ public class ShooterClass : CharacterPlayer
     {
         
     }   
-
-    private void Update()
-    {
-        ContCharacter();
-    }
+    
 }

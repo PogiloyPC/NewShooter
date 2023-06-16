@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using CharacterModification;
@@ -9,26 +7,27 @@ public class CharacterVitalsStatistic : MonoBehaviour, ICharacteristicHealth, IC
     [HideInInspector] public UnityEvent<float, float> OnDisplayHealth;
     [HideInInspector] public UnityEvent<float, float> OnDisplayStamina;
     [HideInInspector] public UnityEvent<float, float> OnDisplayEnergy;
+    [HideInInspector] public UnityEvent OnEnabledVitalStatics;
 
-    [SerializeField] private CharacteristicsCharacter _characteristics;
+    [SerializeField] private CharacteristicsCharacter _characteristics;    
 
-    public float StartHealth { get; private set; }
-    public float StartStamina { get; private set; }
-    public float StartEnergy { get; private set; }
     private float _currentHealth;
     private float _currentStamina;
     private float _currentEnergy;
 
     private void Awake()
     {
-        StartHealth = _characteristics.HealthCharacteristic;
-        StartStamina = _characteristics.StaminaCharacteristic;
-        StartEnergy = _characteristics.EnergyCharacteristic;
+        _currentHealth = _characteristics.HealthCharacteristic;
+        _currentStamina = _characteristics.StaminaCharacteristic;
+        _currentEnergy = _characteristics.EnergyCharacteristic;
+    }
 
-        _currentHealth = StartHealth;
-        _currentStamina = StartStamina;
-        _currentEnergy = StartEnergy;
-}
+    private void Start()
+    {
+        OnDisplayHealth?.Invoke(_currentHealth, _characteristics.HealthCharacteristic);
+        OnDisplayStamina?.Invoke(_currentStamina, _characteristics.StaminaCharacteristic);
+        OnDisplayEnergy?.Invoke(_currentEnergy, _characteristics.EnergyCharacteristic);
+    }
 
     public void TakeDamage(float damage)
     {
@@ -37,7 +36,11 @@ public class CharacterVitalsStatistic : MonoBehaviour, ICharacteristicHealth, IC
 
         _currentHealth = Mathf.Clamp(_currentHealth - damage, 0f, 2000f);
 
-        OnDisplayHealth?.Invoke(_currentHealth, StartHealth);
+        OnDisplayHealth?.Invoke(_currentHealth, _characteristics.HealthCharacteristic);
+        OnEnabledVitalStatics?.Invoke();
+
+        if (_currentHealth <= 0f)
+            Destroy(gameObject);
     }
 
     public void ReduceStamina(float valueStamina)
@@ -47,7 +50,8 @@ public class CharacterVitalsStatistic : MonoBehaviour, ICharacteristicHealth, IC
 
         _currentStamina = Mathf.Clamp(_currentStamina - valueStamina, 0f, 2000f);
 
-        OnDisplayStamina?.Invoke(_currentStamina, StartStamina);
+        OnDisplayStamina?.Invoke(_currentStamina, _characteristics.StaminaCharacteristic);
+        OnEnabledVitalStatics?.Invoke();
     }
 
     public void ReduceEnergy(float valueEnergy)
@@ -57,7 +61,8 @@ public class CharacterVitalsStatistic : MonoBehaviour, ICharacteristicHealth, IC
 
         _currentEnergy = Mathf.Clamp(_currentEnergy - valueEnergy, 0f, 2000f);
 
-        OnDisplayEnergy?.Invoke(_currentEnergy, StartEnergy);
+        OnDisplayEnergy?.Invoke(_currentEnergy, _characteristics.EnergyCharacteristic);
+        OnEnabledVitalStatics?.Invoke();
     }
 
     public void RestoreHealth(float valueHealth)
@@ -67,7 +72,7 @@ public class CharacterVitalsStatistic : MonoBehaviour, ICharacteristicHealth, IC
 
         _currentHealth = Mathf.Clamp(_currentHealth + valueHealth, 0f, 2000f);
 
-        OnDisplayHealth?.Invoke(_currentHealth, StartHealth);
+        OnDisplayHealth?.Invoke(_currentHealth, _characteristics.HealthCharacteristic);
     }
 
     public void RestoreStamina(float valueStamina)
@@ -77,7 +82,7 @@ public class CharacterVitalsStatistic : MonoBehaviour, ICharacteristicHealth, IC
 
         _currentStamina = Mathf.Clamp(_currentStamina + valueStamina, 0f, 2000f);
 
-        OnDisplayStamina?.Invoke(_currentStamina, StartStamina);
+        OnDisplayStamina?.Invoke(_currentStamina, _characteristics.StaminaCharacteristic);
     }
 
     public void RestoreEnergy(float valueEnergy)
@@ -87,6 +92,6 @@ public class CharacterVitalsStatistic : MonoBehaviour, ICharacteristicHealth, IC
 
         _currentEnergy = Mathf.Clamp(_currentEnergy + valueEnergy, 0f, 2000f);
 
-        OnDisplayEnergy?.Invoke(_currentEnergy, StartEnergy);
+        OnDisplayEnergy?.Invoke(_currentEnergy, _characteristics.EnergyCharacteristic);
     }
 }

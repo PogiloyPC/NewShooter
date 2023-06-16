@@ -12,10 +12,5 @@ public class SwordsmanClass : CharacterPlayer
     protected override void StartPlayer()
     {
         
-    }
-
-    private void Update()
-    {
-        
-    }
+    }    
 }

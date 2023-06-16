@@ -1,52 +1,67 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using StateGlove;
+using InterfaceModification;
 
 public class SmartGlove : MonoBehaviour
 {
+    [SerializeField] private Transform _player;
+
     [SerializeField] private List<StateSmartGlove> _statesGlove;
 
-    [SerializeField] private Transform rayOutHand;
+    [SerializeField] private Transform _rayOutHand;
 
-    [SerializeField] public StateGloveType stateGlove;
+    [SerializeField] private StateGloveType _stateGlove;   
 
-    private int numberStateGlove;
+    private IViewStateGlove _viewStateGlove;
+
+    private int _numberStateGlove;
 
     private void Start()
-    {
+    {              
+        foreach (StateSmartGlove stateGlove in _statesGlove)
+            stateGlove.Start();
     }
 
     private void Update()
     {
-        ActiveStateGlove(ChangeStateGlove());
+        if (Input.GetKeyDown(KeyCode.E))        
+            ChangeStateGlove(1);        
+        else if (Input.GetKeyDown(KeyCode.Q))        
+            ChangeStateGlove(-1);        
+
+        ActiveStateGlove(_numberStateGlove);
     }
 
-    private int ChangeStateGlove()
+    private void ChangeStateGlove(int value)
     {
-        if (Input.GetKeyDown(KeyCode.E))
-            numberStateGlove = Mathf.Clamp(numberStateGlove + 1, _statesGlove.Count - _statesGlove.Count, _statesGlove.Count - 1);
-        else if (Input.GetKeyDown(KeyCode.Q))
-            numberStateGlove = Mathf.Clamp(numberStateGlove - 1, _statesGlove.Count - _statesGlove.Count, _statesGlove.Count - 1);       
+        _numberStateGlove = Mathf.Clamp(_numberStateGlove + value, _statesGlove.Count - _statesGlove.Count, _statesGlove.Count - 1);
 
-        return numberStateGlove;
+        _viewStateGlove.ChangeImageStateGlove(_statesGlove[_numberStateGlove].Image);                    
     }
 
     private StateGloveType ActiveStateGlove(int numberState)
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
 
-        float rotateZ = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+        float rotateZ = Mathf.Atan2(mousePos.y * _player.localScale.x, mousePos.x * _player.localScale.x) * Mathf.Rad2Deg;
 
         if (rotateZ <= 75f && rotateZ >= -75f)
         {
             transform.rotation = Quaternion.Euler(0f, 0f, rotateZ);
 
-            _statesGlove[numberState].ManageState(mousePos);
+            _statesGlove[numberState].ManageState(_rayOutHand.position, mousePos);
 
-            stateGlove = _statesGlove[numberState].StateGlove;
+            _stateGlove = _statesGlove[numberState].StateGlove;
         }
 
-        return stateGlove;
+        return _stateGlove;
+    }
+    
+    public void AddListen(IViewStateGlove viewStateGlove)
+    {
+        _viewStateGlove = viewStateGlove;
+
+        _viewStateGlove.ChangeImageStateGlove(_statesGlove[_numberStateGlove].Image);
     }
 }

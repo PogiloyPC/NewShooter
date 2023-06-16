@@ -44,7 +44,7 @@ namespace CharacterModification
                 return false;
             }
 
-            public int SwitchWeapon(ref int number, int maxCountWeapon, int minCountWeapon = 0)
+            public int SwitchWeapon(ref int number, int maxCountWeapon, IReadOnlyList<Weapon> image, int minCountWeapon = 0)
             {
 
                 return number;

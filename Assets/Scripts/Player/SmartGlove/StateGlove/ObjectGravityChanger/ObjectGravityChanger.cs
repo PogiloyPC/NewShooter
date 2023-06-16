@@ -1,11 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "State/StateGlove/ObjectGravityChanger", order = 15)]
 public class ObjectGravityChanger : StateSmartGlove
-{    
-    public override void ManageState(Vector2 mousePos)
+{
+    public override void Start()
     {
         
+    }
+
+    public override void ManageState(Vector2 origin, Vector2 direction)
+    {
+        RaycastHit2D hit = Line(origin, direction);
     }    
 }

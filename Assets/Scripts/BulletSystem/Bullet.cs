@@ -19,8 +19,9 @@ public class Bullet : MonoBehaviour
     }
 
     public void ShotBullet(Vector3 direct)
-    {       
-        _rb.AddForce(direct.normalized * _speed, ForceMode2D.Impulse);
+    {
+        Vector3 direction = direct.normalized;
+        _rb.AddForce(direction * _speed, ForceMode2D.Impulse);
     }
 
     public void GetPropertyBullet(float damageWeapon, float speedBullet)
@@ -37,13 +38,10 @@ public class Bullet : MonoBehaviour
         {
             _touch++;
 
-            health.TakeDamage(_damage / _touch);
-            health.ReduceStamina(40f);
+            health.TakeDamage(_damage / _touch);            
 
-            if (_touch >= _breakingCapacity)
-            {             
-                Destroy(gameObject, 2f);
-            }
+            if (_touch >= _breakingCapacity)                         
+                Destroy(gameObject, 2f);            
         }
     }
 }

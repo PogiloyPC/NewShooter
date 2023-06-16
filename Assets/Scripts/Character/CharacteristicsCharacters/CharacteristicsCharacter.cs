@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using System;
 
-[RequireComponent(typeof(Character))]
-public abstract class CharacteristicsCharacter : MonoBehaviour
+public abstract class CharacteristicsCharacter : ScriptableObject
 {   
     [SerializeField, Range(200, 2000)] private float _healthCharacteristic;
     [SerializeField, Range(200, 2000)] private float _staminaCharacteristic;
